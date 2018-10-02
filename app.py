@@ -1,20 +1,35 @@
 # -*- coding:utf-8 -*-
 import random
-from chalice import Chalice
+from chalice import Chalice, Rate
 from github import Github
 from chalicelib import secret
+import telegram
 
 app = Chalice(app_name='til-reminder')
 
 @app.route('/')
+# @app.schedule(Rate(1, unit=Rate.MINUTES))
 def reminder():
   # github connection 
+  print('reminder started')
+  
   g = Github(secret.account['id'], secret.account['password'])
   repo = g.get_repo('jmpark6846/til')
+  print('github logged in')
 
   file = pick_random_markdown_file_in_repo(repo)
-#   content = str(file.decoded_content, encoding='utf-8')
-  return { 'path' : file.path }
+  print('pick random file from repo')
+  
+  content = 'TIL 다시보기: {}\n{}'.format(file.path, file.html_url)
+  send_telegram_message(bot_token=secret.telegram_bot['token'], chat_id=secret.telegram_bot['chat_id'], content=content)
+  print('telegram message sent')
+  
+  return { 'to': secret.telegram_bot['chat_id'], 'file' : file.path }
+
+
+def send_telegram_message(bot_token, chat_id, content):
+  bot = telegram.Bot(token=bot_token)
+  bot.sendMessage(chat_id=chat_id, text=content)
 
 
 def pick_random_markdown_file_in_repo(repo, path='/'):
@@ -26,22 +41,6 @@ def pick_random_markdown_file_in_repo(repo, path='/'):
     return pick_random_markdown_file_in_repo(repo, '/')
   else:
     return file_contents
-# The view function above will return {"hello": "world"}
-# whenever you make an HTTP GET request to '/'.
-#
-# Here are a few more examples:
-#
-# @app.route('/hello/{name}')
-# def hello_name(name):
-#    # '/hello/james' -> {"hello": "james"}
-#    return {'hello': name}
-#
-# @app.route('/users', methods=['POST'])
-# def create_user():
-#     # This is the JSON body the user sent in their POST request.
-#     user_as_json = app.current_request.json_body
-#     # We'll echo the json body back to the user in a 'user' key.
-#     return {'user': user_as_json}
-#
-# See the README documentation for more examples.
-#
+
+
+reminder()
