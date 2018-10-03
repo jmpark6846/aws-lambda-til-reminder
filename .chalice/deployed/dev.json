@@ -7,15 +7,14 @@
       "role_name": "til-reminder-dev"
     },
     {
-      "name": "api_handler",
+      "name": "reminder",
       "resource_type": "lambda_function",
-      "lambda_arn": "arn:aws:lambda:ap-northeast-2:155706891817:function:til-reminder-dev"
+      "lambda_arn": "arn:aws:lambda:ap-northeast-2:155706891817:function:til-reminder-dev-reminder"
     },
     {
-      "name": "rest_api",
-      "resource_type": "rest_api",
-      "rest_api_id": "glp4xclqjj",
-      "rest_api_url": "https://glp4xclqjj.execute-api.ap-northeast-2.amazonaws.com/api/"
+      "name": "reminder-event",
+      "resource_type": "cloudwatch_event",
+      "rule_name": "til-reminder-dev-reminder-event"
     }
   ],
   "schema_version": "2.0",

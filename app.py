@@ -1,35 +1,44 @@
 # -*- coding:utf-8 -*-
 import random
-from chalice import Chalice, Rate
+from chalice import Chalice, Rate, Cron
 from github import Github
 from chalicelib import secret
 import telegram
 
 app = Chalice(app_name='til-reminder')
 
-@app.route('/')
-# @app.schedule(Rate(1, unit=Rate.MINUTES))
-def reminder():
+
+@app.schedule(Cron(0, 23, '*', '*', '?', '*'))
+def reminder(event):
   # github connection 
   print('reminder started')
-  
+
   g = Github(secret.account['id'], secret.account['password'])
   repo = g.get_repo('jmpark6846/til')
   print('github logged in')
 
   file = pick_random_markdown_file_in_repo(repo)
-  print('pick random file from repo')
+  print('pick a random file from repo: ' + file.path)
   
-  content = 'TIL 다시보기: {}\n{}'.format(file.path, file.html_url)
+  content = make_content_from_file_metadata(file)
+  print('make content from file for telegram bot')
+
   send_telegram_message(bot_token=secret.telegram_bot['token'], chat_id=secret.telegram_bot['chat_id'], content=content)
   print('telegram message sent')
   
   return { 'to': secret.telegram_bot['chat_id'], 'file' : file.path }
 
 
+def make_content_from_file_metadata(file):
+  category = '/'.join(file.path.split('/')[:-1])
+  title = '.'.join(file.name.split('.')[:-1])
+  content = '*TIL 다시보기*\n({}){}\n[읽으러가기]({})'.format(category, title, file.html_url)
+  return content
+
+
 def send_telegram_message(bot_token, chat_id, content):
   bot = telegram.Bot(token=bot_token)
-  bot.sendMessage(chat_id=chat_id, text=content)
+  bot.send_message(chat_id=chat_id, text=content, parse_mode=telegram.ParseMode.MARKDOWN)
 
 
 def pick_random_markdown_file_in_repo(repo, path='/'):
