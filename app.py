@@ -50,6 +50,3 @@ def pick_random_markdown_file_in_repo(repo, path='/'):
     return pick_random_markdown_file_in_repo(repo, '/')
   else:
     return file_contents
-
-
-reminder()
