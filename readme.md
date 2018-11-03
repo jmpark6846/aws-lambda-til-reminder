@@ -3,11 +3,11 @@ AWS Lambda와 Chalice, Telegram API를 활용한 TIL 리마인더
 TIL 리마인더는 [TIL 저장소](https://github.com/jmpark6846/til)에 있는 토막지식들을 매일 1개씩 무작위로 골라 Telegram 봇(@til_reminder)로 메세지를 보냅니다.
 
 
-![chat](asset/chat-example.jpg)
+![chat](asset/chat-example.png)
 
 
 ## 주요 구조 설명
-- app.py: Chalice의 주요 실행 파일입니다. 자세한 내용은 **app.py 를 참고해주세요.**
+- app.py: Chalice의 주요 실행 파일입니다. 
 - chalicelib/ : Chalice 앱에서 사용되는 환경설정 파일을 담는 곳입니다. Github 계정 정보, 텔레그램 봇 토큰 등이 저장됩니다.
 - vendor/ : 배포 시 자동으로 빌드되지 않는 파이썬 패키지들을 직접 whl 파일로 만들어 저장합니다.
 
