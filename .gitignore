@@ -1,3 +1,5 @@
 .chalice/deployments/
 .chalice/venv/
 chalicelib/secret.py
+.idea/
+.python-version
