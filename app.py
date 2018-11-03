@@ -20,7 +20,7 @@ def reminder(event):
   file = pick_random_markdown_file_in_repo(repo)
   print('pick a random file from repo: ' + file.path)
   
-  content = make_content_from_file_metadata(file)
+  content = get_message_from_file_metadata(file)
   print('make content from file for telegram bot')
 
   send_telegram_message(bot_token=secret.telegram_bot['token'], chat_id=secret.telegram_bot['chat_id'], content=content)
@@ -29,7 +29,7 @@ def reminder(event):
   return { 'to': secret.telegram_bot['chat_id'], 'file' : file.path }
 
 
-def make_content_from_file_metadata(file):
+def get_message_from_file_metadata(file):
   category = '/'.join(file.path.split('/')[:-1])
   title = '.'.join(file.name.split('.')[:-1])
   content = '*TIL 다시보기*\n({}){}\n[읽으러가기]({})'.format(category, title, file.html_url)
@@ -46,7 +46,7 @@ def pick_random_markdown_file_in_repo(repo, path='/'):
   
   if isinstance(file_contents, list) : # 폴더 인 경우 폴더 내에서 재탐색
     return pick_random_markdown_file_in_repo(repo, "/" + random.choice(file_contents).path)
-  elif file_contents.name.split('.')[-1] != 'md' or file_contents.name.lower() == 'readme.md': # 다른 확장자 혹은 리드미 파일 인 경우 상위 디렉토리에서 재탐색
+  elif file_contents.name.split('.')[-1] != 'md' or file_contents.name.lower() == 'readme.md': # 마크다운 이외 확장자 혹은 리드미 파일 인 경우 최상위 디렉토리에서 재탐색
     return pick_random_markdown_file_in_repo(repo, '/')
   else:
     return file_contents
