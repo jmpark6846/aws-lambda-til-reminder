@@ -23,4 +23,5 @@ TIL 리마인더는 [TIL 저장소](https://github.com/jmpark6846/til)에 있는
 - Chalice 1.6
 - PyGithub 1.43.2
 - python-telegram-bot 11.1.0
+- AWS Lambda
 - Windows 10
