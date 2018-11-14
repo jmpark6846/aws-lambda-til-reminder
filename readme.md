@@ -1,5 +1,5 @@
 # Today I Learned 리마인더
-AWS Lambda와 Chalice, Telegram API를 활용한 TIL 리마인더  
+정리한 개발 지식을 복습할 수 있도록 도와주는 텔레그램 봇
 TIL(Today I Learned..)은 개발을 하며 배운 내용을 짧은 토막 지식으로 정리하는 것을 말합니다.  
 TIL 리마인더는 제 [TIL 저장소](https://github.com/jmpark6846/til)에 있는 토막지식들을 매일 1개씩 무작위로 골라 Telegram 봇(@til_reminder)로 메세지를 보냅니다.
 
